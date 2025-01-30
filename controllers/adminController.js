@@ -1,4 +1,4 @@
-import { Admin } from "../middleware/adminSchema.js"
+import { Admin } from "../models/adminSchema.js"
 import {comparedPassword, generateHashedPassword } from "../utils/bcrypt.js"
 import { generateAccessToken } from "../utils/jwt.js"
 import { validateEmail, validatePassword } from "../validation/validation.js"
