@@ -114,4 +114,35 @@ const loginDoctor = async(req, res) => {
 }
 
 
-export { registerDoctor, loginDoctor }
+const forgotPasswordDoctor = async(req , res)=>{
+    try{
+
+        const { email , newPassword } = req.body
+
+        const normalizedEmail = email.toLowerCase()
+
+        const doctor = await Doctor.findOne({email:normalizedEmail})
+
+        if(!doctor){
+            return res.status(404).json({
+                message:"Email does not exist"
+            })
+        }
+
+        const hashedPassword = await generateHashedPassword(newPassword);
+        doctor.password = hashedPassword
+        await doctor.save()
+
+        return res.status(200).json({message:"Password Updated Successfully",doctor:doctor})
+
+
+    }catch(error){
+        return res.status(500).json({
+            error:error.message
+        })
+    }
+}
+
+
+
+export { registerDoctor, loginDoctor, forgotPasswordDoctor }
