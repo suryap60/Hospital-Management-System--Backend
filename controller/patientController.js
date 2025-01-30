@@ -1,60 +1,53 @@
 import { Patient } from "../models/patientSchema.js";
-import {  comparedPassword, generateHashedPassword,  } from "../utils/bcrypt.js";
+import { comparedPassword, generateHashedPassword } from "../utils/bcrypt.js";
 import { generateAccessToken } from "../utils/jwt.js";
-import { validateEmail, validatePassword,} from "../validation/validation.js";
+import { validateEmail, validatePassword } from "../validation/validation.js";
+
 
 const signUp = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
+    try {
+        const { name , email, password, phone ,dateOfBirth, age, gender,medicalHistory,feedbackreview,payment,chat} = req.body;
 
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+        if (!validateEmail(email)) {
+            return res.status(401).json({ message: "Invalid email format" });
+          }
+      
+          // Validate password format
+          if (!validatePassword(password)) {
+            return res.status(401).json({
+              message: "Password must be between 6 and 20 characters long, contain at least one letter, one number, and one special character.",
+            });
+          }
+
+        // Check if email already exists
+        const existingPatient = await Patient.findOne({ email });
+        if (existingPatient) {
+            return res.status(400).json({ message: "Email already registered" });
+        }
+
+        // Encrypt password
+        const hashedPassword = await generateHashedPassword(password);
+
+        // Save new patient
+        const newPatient = new Patient({ name, email, phone, password: hashedPassword ,dateOfBirth, age, gender,medicalHistory,feedbackreview,payment,chat });
+        await newPatient.save();
+
+        res.status(201).json({ message: "Patient registered successfully!" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
-
-    if (!validateEmail(email)) {
-      return res.status(400).json({ message: "invalid email format" });
-    }
-
-    if (!validatePassword(password)) {
-      return res.status(400).json({
-        message:
-          "Password must be between 6 and 20 characters long, contain at least one letter, one number, and one special character.",
-      });
-    }
-
-    const existingUser = await Patient.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "Email is already registered" });
-    } else {
-      const hashedPassword = await generateHashedPassword(password);
-
-      const newUser = new Patient({
-        name,
-        email,
-        password: hashedPassword,
-      });
-
-      await newUser.save();
-
-      res
-        .status(201)
-        .json({ message: "User created successfully!", user: newUser });
-    }
-  } catch (error) {
-    res.status(500).json({ error:error.message });
-  }
-};
+}
 
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await Patient.findOne({ email });
+    const patient = await Patient.findOne({ email });
 
-    if (!user) {
-      return res.status(401).json({ message: "Oops,the user not found.Please signup" });
+    if (!patient) {
+      return res.status(401).json({ message: "Oops,the patient not found.Please signup" });
     }
 
-    const validPassword = await comparedPassword(password, user.password);
+    const validPassword = await comparedPassword(password, patient.password);
     
 
     if (!validPassword) {
@@ -62,17 +55,38 @@ const login = async (req, res) => {
     }
     
     
-    const accessToken = generateAccessToken(user.id);
+    const accessToken = generateAccessToken(patient.id);
     
-    res.status(200).json({
-        success: true,
-        message: "Login successful",
-        user: { name: user.name, email: user.email },
-        accessToken,
-     });
+    res.status(200).json({ success: true, data: patient.name, accessToken });
   } catch (error) {
     res.status(500).json({ error:error.message });
   }
 };
 
-export { signUp, login };
+const forgotPassword =  async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  try {
+    const patient = await Patient.findOne({ email });
+    console.log(patient)
+    if (!patient) {
+      return res.status(404).json({ message: 'patient not found' });
+    }
+
+    // Hash the new password before saving it
+    const hashedPassword =await generateHashedPassword(newPassword);
+    console.log(`hashed ,${hashedPassword}`)
+    patient.password = hashedPassword;
+    
+
+    // Save the updated user
+    await patient.save();
+
+    res.status(200).json({ message: 'Password successfully updated' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating password' });
+  }
+};
+
+
+export { signUp,login,forgotPassword}
