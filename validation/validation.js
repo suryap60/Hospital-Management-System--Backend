@@ -8,4 +8,9 @@ const validateEmail = (email)=>{
     return emailPattern.test(email)
 }
 
-export { validateEmail, validatePassword } 
+const validateMobileNumber = (phone) =>{
+    const mobileNumberPattern =  /^\d{10}$/ ;
+    return mobileNumberPattern.test(phone)
+}
+
+export { validateEmail, validatePassword, validateMobileNumber } 
