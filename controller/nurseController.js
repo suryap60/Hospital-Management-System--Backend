@@ -1,13 +1,13 @@
 import { Nurse } from "../models/nurseSchema.js";
 import { comparedPassword, generateHashedPassword } from "../utils/bcrypt.js";
 import { generateAccessToken } from "../utils/jwt.js";
-import { validateEmail, validatePassword } from "../validation/validation.js";
+import {  validateEmail, validatePassword } from "../validation/validation.js";
 
 
 const nursesignUp = async (req, res) => {
     try {
         const { name, email, password, phone, profilePicture,available } = req.body;
-
+        console.log("email:",email)
         if (!validateEmail(email)) {
             return res.status(401).json({ message: "Invalid email format" });
         }
@@ -66,13 +66,16 @@ const nurseforgotPassword =  async (req, res) => {
 
   try {
     const nurse = await Nurse.findOne({ email });
+    console.log(nurse)
     if (!nurse) {
-      return res.status(404).json({ message: 'Nurse not found' });
+      return res.status(404).json({ message: 'nurse not found' });
     }
 
     // Hash the new password before saving it
-    const hashedPassword = await generateHashedPassword(newPassword);
+    const hashedPassword =await generateHashedPassword(newPassword);
+    console.log(`hashed ,${hashedPassword}`)
     nurse.password = hashedPassword;
+    
 
     // Save the updated user
     await nurse.save();
