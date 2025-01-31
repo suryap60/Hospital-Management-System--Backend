@@ -42,25 +42,22 @@ const doctorSchema = new Schema({
         trype:String
     },
 
-    // Managing Appointments
     appointments: [{ 
         type: mongoose.Schema.Types.ObjectId, 
         ref: "Appointment" 
     }],
 
-    // Managing Chats
     chats: [{ 
         type: mongoose.Schema.Types.ObjectId, 
         ref: "Chat" 
     }],
 
-    // Managing Feedback
     feedbacks: [{ 
         type: mongoose.Schema.Types.ObjectId, 
         ref: "Feedback" 
     }],
 
-    // Managing Payments
+
     payments: [{ 
         type: mongoose.Schema.Types.ObjectId, 
         ref: "Payment" 
@@ -109,12 +106,12 @@ const patientSchema = new Schema({
 })
 
 const appointmentSchema = new Schema({
-    patientId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Patient',
-        required: true
-    },
-    doctorId:{
+    // patient:{
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Patient',
+    //     required: true
+    // },
+    doctor:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Doctor',
         required: true
@@ -123,12 +120,20 @@ const appointmentSchema = new Schema({
         type: Date,
         required: true
     },
+    time:{
+        type: String,
+        required: true
+    },
     status:{
         type:String,
-        enum: ["Pending", "Completed" ,"Cancelled"],
+        enum: ["Pending", "Comfirmed" ,"Cancelled"],
         default: "Pending"
+    
+    },
+    reason:{
+        type:String,
     }
-})
+},{timestamps:true})
 
 const feedBackSchema = new Schema({
     patientId: { 
