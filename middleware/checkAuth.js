@@ -1,26 +1,36 @@
-import jwt from "jsonwebtoken";
+import { verifyToken } from "../utils/jwt"
 
-const checkauth = (req, res, next) => {
-  try {
-    const token = req.headers.authorization;
-    console.log( token); 
+const doctorAuth = async (req, res, next) => {
+    try{
+        const token = req.headers.authorization
 
-    if (!token) {
-      return res.status(401).json({
-        message: `Access denied`,
-      });
+        if(!token){
+            return res
+            .status(401)
+            .json({
+                message: "Access Denid"
+            })
+        }
+
+        const tokenValid = verifyToken(token)
+
+        if(!tokenValid){
+            return res
+            .status(403)
+            .json({
+                message: "Invalid token"
+            })
+        }
+        req.user = tokenValid
+        next()
     }
-
-    const tokenValid = jwt.verify(token, process.env.SECRET_CODE);
-
-    if (!tokenValid) {
-      return res.status(500).json({ message: `You are not authorized` });
+    catch(error){
+        return res
+        .status
+        .json({
+            error: error.message
+        })
     }
-    req.user = tokenValid
-    next();
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
+}
 
-export default checkauth;
+export {doctorAuth}

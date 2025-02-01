@@ -1,9 +1,19 @@
 import express from 'express'
-import { bookAppointment, forgotPassword, getAppointment, login, signUp } from '../controllers/patientController.js';
-import { nurseforgotPassword, nurselogin, nursesignUp } from '../controllers/nurseController.js';
-import checkauth from '../middleware/checkAuth.js';
+import { forgotPassword, login, signUp } from '../controller/patientController.js';
+import { nurseforgotPassword, nurselogin, nursesignUp } from '../controller/nurseController.js';
 
-const router = express.Router()
+//Admin
+router.post('/register',adminSignUp)
+router.post('/adminLogin',adminLogin)
+router.post('/forgot-password',forgotPassword)
+
+//Doctor
+router.post('/registerDoctor',registerDoctor)
+router.post('/loginDoctor',loginDoctor)
+router.post('/forgotPasswordDoctor',forgotPasswordDoctor)
+
+//appoinment
+router.post('/book',bookAppointment)
 
 router.post("/patientlogin",login)
 router.post("/patientregister", signUp);
@@ -13,5 +23,10 @@ router.get("/getAppointment",checkauth,getAppointment)
 router.post("/nurselogin",nurselogin)
 router.post("/nurseregister",nursesignUp );
 router.post("/nurseforgotPassword",nurseforgotPassword)
+
+
+
+const router = express.Router()
+
 
 export { router }
