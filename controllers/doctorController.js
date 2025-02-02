@@ -1,4 +1,4 @@
-import { Doctor } from "../models/doctorSchema.js"
+import { Doctor } from "../models/patientSchema.js"
 import { comparedPassword, generateHashedPassword } from "../utils/bcrypt.js"
 import { generateAccessToken } from "../utils/jwt.js"
 import { validateEmail, validateMobileNumber, validatePassword } from "../validation/validation.js"

@@ -24,6 +24,12 @@ const adminSchema = new Schema({
         excludeSimilarCharacters: true,
         strict: true,
 
+    },
+    otp :{
+        type:String
+    },
+    otpExpiry:{
+        type:Date
     }
 })
 
