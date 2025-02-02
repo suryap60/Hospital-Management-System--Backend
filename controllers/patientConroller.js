@@ -1,7 +1,7 @@
 import { Patient } from "../models/patientSchema.js";
 import { comparedPassword, generateHashedPassword } from "../utils/bcrypt.js";
 import { generateAccessToken } from "../utils/jwt.js";
-import { validateEmail, validatePassword } from "../validation/validation.js";
+import { validateEmail, validateMobileNumber, validatePassword } from "../validation/validation.js";
 
 
 const signUp = async (req, res) => {
@@ -17,6 +17,12 @@ const signUp = async (req, res) => {
             return res.status(401).json({
               message: "Password must be between 6 and 20 characters long, contain at least one letter, one number, and one special character.",
             });
+          }
+
+          if(!validateMobileNumber(phone)){
+            return res.status(400).json({
+                message: "Enter a Valid 10-digit Number"
+            })
           }
 
         // Check if email already exists
@@ -53,7 +59,6 @@ const login = async (req, res) => {
     if (!validPassword) {
       return res.status(401).json({ message: "Invalid User Information" });
     }
-    
     
     const accessToken = generateAccessToken(patient.id);
     

@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
-const PatientSchema = new mongoose.Schema({
+const Schema = mongoose.Schema
+
+const PatientSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -17,7 +19,6 @@ const PatientSchema = new mongoose.Schema({
   phone: {
     type: Number,
     required: true,
-    match: /^[0-9]{10}$/,
   },
   age: {
     type: Number,
@@ -56,7 +57,8 @@ const PatientSchema = new mongoose.Schema({
     },
   ],
 });
-const medicalSchema = new mongoose.Schema({
+
+const medicalSchema = new Schema({
   patientId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Patient",
@@ -89,7 +91,8 @@ const medicalSchema = new mongoose.Schema({
   },
   createdAt: { type: Date, default: Date.now },
 });
-const paymentSchema = new mongoose.Schema({
+
+const paymentSchema = new Schema({
   patientId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Patient",
@@ -122,13 +125,14 @@ const paymentSchema = new mongoose.Schema({
     default: null,
   },
 });
-const feedbackReviewSchema = new mongoose.Schema({
-  patientId: {
+
+const feedbackReviewSchema = new Schema({
+  patient: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Patient",
     required: true,
   },
-  doctorId: {
+  doctor: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Doctor",
     required: true,
@@ -148,45 +152,127 @@ const feedbackReviewSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-const appointmentSchema = new mongoose.Schema({
-  patientId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Patient",
-    required: true,
-  },
-  doctorId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Doctor",
-    required: true,
-  },
-  date: {
-    type: Date,
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: ["Pending", "Completed", "Cancelled"],
-    default: "Pending",
-  },
+
+const appointmentSchema = new Schema({
+    patient:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Patient',
+        required: true
+    },
+    doctor:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Doctor',
+        required: true
+    },
+    date:{
+        type: Date,
+        required: true
+    },
+    time:{
+        type: String,
+        required: true
+    },
+    status:{
+        type:String,
+        enum: ["Pending", "Comfirmed" ,"Cancelled"],
+        default: "Pending"
+    
+    },
+    reason:{
+        type:String,
+    }
+},{timestamps:true})
+
+const doctorSchema = new Schema({
+    fullName :{
+        type: String,
+        trim: true,
+        required:true,
+    },
+    email:{
+        type:String,
+        trim:true,
+        required:true,
+        unique:true
+    },
+    phone:{
+        type:String,
+        trim:true,
+        required:true,
+        length: 10,
+        unique: true
+        
+    },
+    password  : {
+        type:String,
+        trim:true,
+        required:true,
+        numbers:true,
+        length: 8,
+        symbol:true,
+        excludeSimilarCharacters: true,
+        strict: true,
+
+    },
+    specialty:{
+        type:String,
+        required:true,
+        enum:["Cardiology","Dermatology","Neurology","Pediatrics","Orthopedics"],
+    },
+    profilePicture:{
+        trype:String
+    },
+
+    appointments: [{ 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Appointment" 
+    }],
+
+    chats: [{ 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Chat" 
+    }],
+
+    feedbacks: [{ 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Feedback" 
+    }],
+
+
+    payments: [{ 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Payment" 
+    }]
+})
+
+
+const chatSchema = new Schema({
+    senderId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        required: true 
+    },
+    receiverId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        required: true 
+    },
+    message: { 
+        type: String, 
+        required: true 
+    },
+    timestamp: { 
+        type: Date, 
+        default: Date.now 
+    }
 });
 
-const chatSchema = new mongoose.Schema({
-  message: { type: String, required: true },
-  sender: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Patient",
-    required: true,
-  },
-  reciever: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Doctor",
-    required: true,
-  },
-});
+const Patient = mongoose.model("Patient", PatientSchema);
+const MedicalHistory = mongoose.model("MedicalHistory", medicalSchema);
+const Doctor = mongoose.model("Doctor",doctorSchema)
 const Appointment = mongoose.model("Appointment", appointmentSchema);
 const FeedbackReview = mongoose.model("FeedbackReview", feedbackReviewSchema);
 const Payment = mongoose.model("Payment", paymentSchema);
-const MedicalHistory = mongoose.model("MedicalHistory", medicalSchema);
-const Patient = mongoose.model("Patient", PatientSchema);
+
+
 const Chat = mongoose.model("Chat", chatSchema);
-export { Patient, Chat, MedicalHistory, Payment, FeedbackReview, Appointment };
+
+export { Patient, Doctor, Chat, MedicalHistory, Payment, FeedbackReview, Appointment };

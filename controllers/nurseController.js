@@ -19,6 +19,12 @@ const nursesignUp = async (req, res) => {
             });
         }
 
+        if(!validateMobileNumber(phone)){
+            return res.status(400).json({
+                message: "Enter a Valid 10-digit Number"
+            })
+          }
+
         // Check if email already exists
         const existingNurse = await Nurse.findOne({ email });
         if (existingNurse) {

@@ -1,4 +1,4 @@
-import { Appointment, Doctor } from "../models/doctorSchema.js"
+import { Appointment, Doctor } from "../models/patientSchema.js"
 
 const getDoctorAppointment = async (req,res) => {
     try{

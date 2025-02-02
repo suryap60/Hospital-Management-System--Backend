@@ -1,14 +1,15 @@
-import { Appointment } from "../models/doctorSchema.js"
+import { Appointment } from "../models/patientSchema.js"
 
 const bookAppointment = async (req, res) => {
     try{
-        const {doctor, date, time, reason} = req.body
+        const {doctor, patient, date, time, reason} = req.body
 
-        // if(!patient){
-        //     return res.status(404).json({
-        //         message: "Patient Not Found"
-        //     })
-        // }
+        if(!patient){
+            return res.status(404).json({
+                message: "Patient Not Found"
+            })
+        }
+
         if(!doctor){
             return res.status(404).json({
                 message: "Doctor Not Found"
