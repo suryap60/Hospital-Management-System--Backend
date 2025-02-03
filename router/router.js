@@ -6,7 +6,7 @@ import { doctorForgotPassword } from '../controllers/doctorForgotPasswordControl
 import { doctorResetPassword } from '../controllers/doctorForgotPasswordController.js';
 
 import { bookAppointment } from '../controllers/appointmentController.js'
-import { forgotPassword, login, signUp } from '../controllers/patientConroller.js';
+import { forgotPassword, login, signUp } from '../controllers/patientController.js';
 import { nurseforgotPassword, nurselogin, nursesignUp } from '../controllers/nurseController.js';
 
 
