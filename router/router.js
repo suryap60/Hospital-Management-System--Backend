@@ -1,16 +1,30 @@
 import express from 'express'
-import { forgotPassword, login, signUp } from '../controller/patientController.js';
-import { nurseforgotPassword, nurselogin, nursesignUp } from '../controller/nurseController.js';
+import { adminLogin, adminSignUp } from '../controllers/adminController.js'
+
+import { loginDoctor, registerDoctor } from '../controllers/doctorController.js'
+import { doctorForgotPassword } from '../controllers/doctorForgotPasswordController.js';
+import { doctorResetPassword } from '../controllers/doctorForgotPasswordController.js';
+
+import { bookAppointment } from '../controllers/appointmentController.js'
+import { forgotPassword, login, signUp } from '../controllers/patientConroller.js';
+import { nurseforgotPassword, nurselogin, nursesignUp } from '../controllers/nurseController.js';
+
+
+
+const router = express.Router()
 
 //Admin
 router.post('/register',adminSignUp)
 router.post('/adminLogin',adminLogin)
-router.post('/forgot-password',forgotPassword)
+// router.post('/sentOTP',sendOTPController)
+// router.post('/verifyOTP',verifyAndUpdatePassword)
+// router.post('/forgot-password',forgotPassword)
 
 //Doctor
 router.post('/registerDoctor',registerDoctor)
 router.post('/loginDoctor',loginDoctor)
-router.post('/forgotPasswordDoctor',forgotPasswordDoctor)
+router.post('/forgotPasswordDoctor',doctorForgotPassword)
+router.post('/doctorResetPassword',doctorResetPassword)
 
 //appoinment
 router.post('/book',bookAppointment)
@@ -23,10 +37,6 @@ router.get("/getAppointment",checkauth,getAppointment)
 router.post("/nurselogin",nurselogin)
 router.post("/nurseregister",nursesignUp );
 router.post("/nurseforgotPassword",nurseforgotPassword)
-
-
-
-const router = express.Router()
 
 
 export { router }

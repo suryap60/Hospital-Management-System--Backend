@@ -1,6 +1,6 @@
 import { verifyToken } from "../utils/jwt"
 
-const doctorAuth = async (req, res, next) => {
+const checkAuth = async (req, res, next) => {
     try{
         const token = req.headers.authorization
 
@@ -33,4 +33,4 @@ const doctorAuth = async (req, res, next) => {
     }
 }
 
-export {doctorAuth}
+export {checkAuth}

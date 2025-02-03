@@ -222,6 +222,12 @@ const doctorSchema = new Schema({
     profilePicture:{
         trype:String
     },
+    otp :{
+      type:String
+    },
+    otpExpiry:{
+        type:Date
+    },
 
     appointments: [{ 
         type: mongoose.Schema.Types.ObjectId, 
