@@ -38,7 +38,7 @@ const signUp = async (req, res) => {
         const newPatient = new Patient({ name, email, phone, password: hashedPassword ,dateOfBirth, age, gender,medicalHistory,feedbackreview,payment,chat });
         await newPatient.save();
 
-        res.status(201).json({ message: "Patient registered successfully!" });
+        res.status(201).json({ message: "Patient registered successfully!" ,newPatient});
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
