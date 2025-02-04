@@ -8,6 +8,8 @@ import { doctorResetPassword } from '../controllers/doctorForgotPasswordControll
 import { bookAppointment } from '../controllers/appointmentController.js'
 import { forgotPassword, login, signUp } from '../controllers/patientController.js';
 import { nurseforgotPassword, nurselogin, nursesignUp } from '../controllers/nurseController.js';
+import { deleteAppointment, getPatientAppointment, updateAppointmentStatus } from '../controllers/doctorAppointmentController.js';
+import checkAuth from '../middleware/checkAuth.js';
 
 
 
@@ -25,9 +27,12 @@ router.post('/registerDoctor',registerDoctor)
 router.post('/loginDoctor',loginDoctor)
 router.post('/forgotPasswordDoctor',doctorForgotPassword)
 router.post('/doctorResetPassword',doctorResetPassword)
+router.get('/getPatientAppointment/:id',getPatientAppointment)
+router.put('/updateAppointment/:id',checkAuth,updateAppointmentStatus)
+router.delete('/deleteAppointment/:id',checkAuth,deleteAppointment)
 
 //appoinment
-router.post('/book',bookAppointment)
+router.post('/book/:id',bookAppointment)
 
 //Patient
 router.post("/patientlogin",login)

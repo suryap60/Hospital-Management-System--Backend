@@ -3,7 +3,6 @@ import { Doctor } from "../models/patientSchema.js"
 import { validateEmail } from "../validation/validation.js"
 
 
-
 const doctorForgotPassword  = async(req, res) => {
     try{
         const { email } = req.body
@@ -29,8 +28,8 @@ const doctorForgotPassword  = async(req, res) => {
         await user.save();
 
         const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
+            from: process.env.EMAIL_USER, // Sender's email
+            to: email,                    // Receiver's email
             subject: 'Password Reset OTP',
             text: `Your OTP for password reset is: ${otp}`,
           };
@@ -39,9 +38,11 @@ const doctorForgotPassword  = async(req, res) => {
             if(error){
                 console.error('Error sending OTP email:', error);
                 return res.status(500).json({ 
-                    message: 'Failed to send OTP' 
+                    message: 'Failed to send OTP' ,
+                    error:error.message
                 });
             }
+            console.log('Email sent:', info);
             res.status(200).json({ 
                 message: 'OTP sent successfully' 
             });

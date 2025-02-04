@@ -1,12 +1,13 @@
 import { Appointment, Doctor } from "../models/patientSchema.js"
 
-const getDoctorAppointment = async (req,res) => {
+const getPatientAppointment = async (req,res) => {
     try{
-        const doctorId = req.params.doctorId
-
-        const {patient, date, time, reason} = req.body
+        const doctorId = req.params.id
         
         const doctor = await Doctor.findById({_id : doctorId})
+        .populate({
+            path: 'appointments', // This will populate the appointments field
+            }).exec()
 
         if(!doctor){
             return res.status(404).json({
@@ -14,32 +15,26 @@ const getDoctorAppointment = async (req,res) => {
             })
         }
 
-        const appointment = await Appointment.find({doctor:doctorId}).populate("patient")
+        
+        // Check if the doctor has any appointments
+        const appointments = doctor.appointments;
+        
         // const appoinment  = await Doctor.findOne({patient})
+        console.log("Appointments found:", appointments.length);  // Debugging log to check how many appointments were found
 
-        if(appointment.length === 0){
+
+        if(appointments.length === 0){
             return res.status(404).json({
                 message: "There is No Appointment"
             })
+        
+
         }
 
-        const newAppointment = new Appointment({
-            doctor:doctorId,
-            patient,
-            date,
-            time,
-            reason
-        })
-
-        await newAppointment.save()
-
-         // Add the new appointment to the doctor's list of appointments
-        doctor.appointments.push(newAppointment._id);
-        await doctor.save();
-
         return res.status(201).json({
-            message: "New appointment created successfully",
-            appointment: newAppointment
+            message: "All appointments",
+            doctor:doctor.fullName,
+            appointment: appointments
         });
     }
     catch(error){
@@ -56,6 +51,9 @@ const updateAppointmentStatus = async (req,res)=>{
         const { status } = req.body
 
         const existingDoctor = await Doctor.findById(doctor._id)
+        .populate({
+            path: 'appointments', // This will populate the appointments field
+            }).exec()
 
         if(!existingDoctor){
             return res 
@@ -79,14 +77,23 @@ const updateAppointmentStatus = async (req,res)=>{
                 message:"Invalid status value"
             })
         }
-        const updatedAppointment = await Appointment.findByIdAndUpdate({
+
+        const updatedAppointment = await Appointment.findById({
             _id:appointmentId},
-            {status},
-            {new:true}  // Ensure the updated document is returned
+            // {status},
+            // {new:true}  // Ensure the updated document is returned
 
         )
+        if (!updatedAppointment) {
+            return res.status(404).json({
+                message: "Appointment Not Found"
+            })
+        }
 
-    
+        updatedAppointment.status = status;
+        await updatedAppointment.save();
+
+
         return res.status(200).json({
             message: "Appointment updated successfully",
             appointment:updatedAppointment
@@ -106,6 +113,9 @@ const deleteAppointment = async (req,res)=>{
         const appointmentId = req.params.id
 
         const existingDoctor = await Doctor.findById(doctor._id)
+        .populate({
+            path: 'appointments', // This will populate the appointments field
+            }).exec()
 
         if(!existingDoctor){
             return res 
@@ -123,14 +133,21 @@ const deleteAppointment = async (req,res)=>{
                 message:"Appoinment Not Found"
             })
         }
-        existingDoctor.appointments.filter(
-            appointment => appointment._id.toString() !== appointmentId)
+
+        const appointmentToDelete = await Appointment.findById(appointmentId);
+        if (appointmentToDelete) {
+            await Appointment.findByIdAndDelete(appointmentId);
+        }
+
+        existingDoctor.appointments = existingDoctor.appointments.filter(
+            appointment => appointment._id.toString() !== appointmentId
+        );
 
         await existingDoctor.save()
         
         return res.status(200).json({
             message: "Appointment deleted successfully",
-            doctor:existingDoctor.appointments
+            doctorappointments:existingDoctor.appointments
         })
 
 
@@ -141,4 +158,4 @@ const deleteAppointment = async (req,res)=>{
     }
 }
 
-export {getDoctorAppointment, updateAppointmentStatus, deleteAppointment}
+export {getPatientAppointment, updateAppointmentStatus, deleteAppointment}

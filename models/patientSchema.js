@@ -35,10 +35,12 @@ const PatientSchema = new Schema({
       ref: "MedicalHistory",
     },
   ],
-  appointment: [{
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Appointment", 
-      }],
+
+  appointment: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: "Appointment" 
+  }],
+
   feedbackreview: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -128,12 +130,12 @@ const paymentSchema = new Schema({
 });
 
 const feedbackReviewSchema = new Schema({
-  patient: {
+  patientId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Patient",
     required: true,
   },
-  doctor: {
+  doctorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Doctor",
     required: true,
@@ -155,12 +157,12 @@ const feedbackReviewSchema = new Schema({
 });
 
 const appointmentSchema = new Schema({
-    patient:{
+    patientId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Patient',
         required: true
     },
-    doctor:{
+    doctorId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Doctor',
         required: true
@@ -175,7 +177,7 @@ const appointmentSchema = new Schema({
     },
     status:{
         type:String,
-        enum: ["Pending", "Comfirmed" ,"Cancelled"],
+        enum: ["Pending", "Confirmed" ,"Cancelled"],
         default: "Pending"
     
     },
