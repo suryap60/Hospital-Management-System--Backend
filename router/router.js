@@ -5,7 +5,6 @@ import { loginDoctor, registerDoctor } from '../controllers/doctorController.js'
 import { doctorForgotPassword } from '../controllers/doctorForgotPasswordController.js';
 import { doctorResetPassword } from '../controllers/doctorForgotPasswordController.js';
 
-import { bookAppointment } from '../controllers/appointmentController.js'
 import { forgotPassword, login, signUp } from '../controllers/patientController.js';
 import { nurseforgotPassword, nurselogin, nursesignUp } from '../controllers/nurseController.js';
 import { deleteAppointment, getPatientAppointment, updateAppointmentStatus } from '../controllers/doctorAppointmentController.js';
@@ -32,7 +31,6 @@ router.put('/updateAppointment/:id',checkAuth,updateAppointmentStatus)
 router.delete('/deleteAppointment/:id',checkAuth,deleteAppointment)
 
 //appoinment
-router.post('/book/:id',bookAppointment)
 
 //Patient
 router.post("/patientlogin",login)
