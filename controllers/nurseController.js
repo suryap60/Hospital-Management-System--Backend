@@ -1,7 +1,7 @@
 import { Nurse } from "../models/nurseSchema.js";
 import { comparedPassword, generateHashedPassword } from "../utils/bcrypt.js";
 import { generateAccessToken } from "../utils/jwt.js";
-import {  validateEmail, validatePassword } from "../validation/validation.js";
+import {  validateEmail, validateMobileNumber, validatePassword } from "../validation/validation.js";
 
 
 const nursesignUp = async (req, res) => {

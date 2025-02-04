@@ -1,8 +1,8 @@
 import { Patient } from "../models/patientSchema.js";
 import { comparedPassword, generateHashedPassword } from "../utils/bcrypt.js";
 import { generateAccessToken } from "../utils/jwt.js";
-import { validateEmail, validateMobileNumber, validatePassword } from "../validation/validation.js";
-
+import { validateEmail, validatePassword } from "../validation/validation.js";
+import { Appointment } from "../models/patientSchema.js";
 
 const signUp = async (req, res) => {
     try {
@@ -19,12 +19,6 @@ const signUp = async (req, res) => {
             });
           }
 
-          if(!validateMobileNumber(phone)){
-            return res.status(400).json({
-                message: "Enter a Valid 10-digit Number"
-            })
-          }
-
         // Check if email already exists
         const existingPatient = await Patient.findOne({ email });
         if (existingPatient) {
@@ -38,7 +32,7 @@ const signUp = async (req, res) => {
         const newPatient = new Patient({ name, email, phone, password: hashedPassword ,dateOfBirth, age, gender,medicalHistory,feedbackreview,payment,chat });
         await newPatient.save();
 
-        res.status(201).json({ message: "Patient registered successfully!" ,newPatient});
+        res.status(201).json({ message: "Patient registered successfully!" });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -59,6 +53,7 @@ const login = async (req, res) => {
     if (!validPassword) {
       return res.status(401).json({ message: "Invalid User Information" });
     }
+    
     
     const accessToken = generateAccessToken(patient.id);
     
@@ -94,4 +89,37 @@ const forgotPassword =  async (req, res) => {
 };
 
 
-export { signUp,login,forgotPassword}
+
+// Book Appointment
+ const bookAppointment = async (req, res) => {
+  const { doctorId, date, time } = req.body;
+
+  try {
+    const appointment = new Appointment({
+      patientId: req.patient.id,
+      doctorId,
+      date,
+      time,
+      status: "Pending",
+    });
+
+    await appointment.save();
+    res.status(201).json({ message: "Appointment booked successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+//get appointment
+const getAppointment = async (req, res) => {
+  try {
+    const appointments = await Appointment.find({ patientId: req.user.id }).populate("doctorId", "name specialty");
+    res.json(appointments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+export { signUp,login,forgotPassword,bookAppointment,getAppointment}

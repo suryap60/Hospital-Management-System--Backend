@@ -5,10 +5,12 @@ import { loginDoctor, registerDoctor } from '../controllers/doctorController.js'
 import { doctorForgotPassword } from '../controllers/doctorForgotPasswordController.js';
 import { doctorResetPassword } from '../controllers/doctorForgotPasswordController.js';
 
+import { bookAppointment } from '../controllers/appointmentController.js'
 import { forgotPassword, login, signUp } from '../controllers/patientController.js';
 import { nurseforgotPassword, nurselogin, nursesignUp } from '../controllers/nurseController.js';
+import patientAppointment from '../controllers/patientAppointment.js';
 import { deleteAppointment, getPatientAppointment, updateAppointmentStatus } from '../controllers/doctorAppointmentController.js';
-import checkAuth from '../middleware/checkAuth.js';
+
 
 
 
@@ -31,13 +33,14 @@ router.put('/updateAppointment/:id',checkAuth,updateAppointmentStatus)
 router.delete('/deleteAppointment/:id',checkAuth,deleteAppointment)
 
 //appoinment
+router.post('/book',bookAppointment)
 
-//Patient
 router.post("/patientlogin",login)
 router.post("/patientregister", signUp);
 router.post("/patientforgotPassword",forgotPassword)
+router.post("/patientAppointment/:patientId",patientAppointment)
 
-//Nurse
+// router.get("/getAppointment",checkAuth,getAppointment)
 router.post("/nurselogin",nurselogin)
 router.post("/nurseregister",nursesignUp );
 router.post("/nurseforgotPassword",nurseforgotPassword)
