@@ -57,7 +57,7 @@ const login = async (req, res) => {
     
     const accessToken = generateAccessToken(patient.id);
     
-    res.status(200).json({ success: true, data: patient.name, accessToken });
+    res.status(200).json({ success: true, data: patient, accessToken });
   } catch (error) {
     res.status(500).json({ error:error.message });
   }

@@ -8,6 +8,8 @@ import { doctorResetPassword } from '../controllers/doctorForgotPasswordControll
 import { bookAppointment } from '../controllers/appointmentController.js'
 import { forgotPassword, login, signUp } from '../controllers/patientController.js';
 import { nurseforgotPassword, nurselogin, nursesignUp } from '../controllers/nurseController.js';
+import { checkAuth } from '../middleware/checkAuth.js';
+import patientAppointment from '../controllers/patientAppointment.js';
 
 
 
@@ -32,8 +34,8 @@ router.post('/book',bookAppointment)
 router.post("/patientlogin",login)
 router.post("/patientregister", signUp);
 router.post("/patientforgotPassword",forgotPassword)
-router.post("/bookAppointment",checkauth,bookAppointment)
-router.get("/getAppointment",checkauth,getAppointment)
+router.post("/patientAppointment",checkAuth,patientAppointment)
+// router.get("/getAppointment",checkAuth,getAppointment)
 router.post("/nurselogin",nurselogin)
 router.post("/nurseregister",nursesignUp );
 router.post("/nurseforgotPassword",nurseforgotPassword)
