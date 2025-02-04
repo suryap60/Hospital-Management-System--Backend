@@ -5,7 +5,7 @@ import { loginDoctor, registerDoctor } from '../controllers/doctorController.js'
 import { doctorForgotPassword } from '../controllers/doctorForgotPasswordController.js';
 import { doctorResetPassword } from '../controllers/doctorForgotPasswordController.js';
 
-import { bookAppointment } from '../controllers/appointmentController.js'
+
 import { forgotPassword, login, signUp } from '../controllers/patientController.js';
 import { nurseforgotPassword, nurselogin, nursesignUp } from '../controllers/nurseController.js';
 import { checkAuth } from '../middleware/checkAuth.js';
@@ -28,13 +28,11 @@ router.post('/loginDoctor',loginDoctor)
 router.post('/forgotPasswordDoctor',doctorForgotPassword)
 router.post('/doctorResetPassword',doctorResetPassword)
 
-//appoinment
-router.post('/book',bookAppointment)
 
 router.post("/patientlogin",login)
 router.post("/patientregister", signUp);
 router.post("/patientforgotPassword",forgotPassword)
-router.post("/patientAppointment",checkAuth,patientAppointment)
+router.post("/patientAppointment/:patientId",patientAppointment)
 // router.get("/getAppointment",checkAuth,getAppointment)
 router.post("/nurselogin",nurselogin)
 router.post("/nurseregister",nursesignUp );
