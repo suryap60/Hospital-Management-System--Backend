@@ -5,11 +5,14 @@ import { loginDoctor, registerDoctor } from '../controllers/doctorController.js'
 import { doctorForgotPassword } from '../controllers/doctorForgotPasswordController.js';
 import { doctorResetPassword } from '../controllers/doctorForgotPasswordController.js';
 
-import { bookAppointment } from '../controllers/appointmentController.js'
 import { forgotPassword, login, signUp } from '../controllers/patientController.js';
 import { nurseforgotPassword, nurselogin, nursesignUp } from '../controllers/nurseController.js';
 import patientAppointment from '../controllers/patientAppointment.js';
-import { deleteAppointment, getPatientAppointment, updateAppointmentStatus } from '../controllers/doctorAppointmentController.js';
+import { viewPatientAppointment, updateAppointmentStatus, deleteAppointment  } from '../controllers/doctorAppointmentController.js';
+import checkAuth from '../middleware/checkAuth.js';
+import { deleteDoctorProfile, updateDoctorProfile, viewDoctorProfile } from '../controllers/doctorProfileController.js';
+import { upload } from '../middleware/uploadMiddleware.js';
+
 
 
 
@@ -24,16 +27,22 @@ router.post('/adminLogin',adminLogin)
 // router.post('/forgot-password',forgotPassword)
 
 //Doctor
-router.post('/registerDoctor',registerDoctor)
+router.post('/registerDoctor',upload,registerDoctor)
 router.post('/loginDoctor',loginDoctor)
 router.post('/forgotPasswordDoctor',doctorForgotPassword)
 router.post('/doctorResetPassword',doctorResetPassword)
-router.get('/getPatientAppointment/:id',getPatientAppointment)
+
+//DoctorAppointment
+router.get('/viewPatientAppointment/:id',viewPatientAppointment)
 router.put('/updateAppointment/:id',checkAuth,updateAppointmentStatus)
 router.delete('/deleteAppointment/:id',checkAuth,deleteAppointment)
 
-//appoinment
-router.post('/book',bookAppointment)
+// Doctor Profile
+router.get('/viewDoctorProfile',checkAuth,viewDoctorProfile)
+router.put('/updateDoctorProfile',checkAuth,updateDoctorProfile)
+router.delete('/deleteDoctorProfile',checkAuth,deleteDoctorProfile)
+
+
 
 router.post("/patientlogin",login)
 router.post("/patientregister", signUp);

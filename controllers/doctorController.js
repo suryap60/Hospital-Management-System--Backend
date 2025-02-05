@@ -8,8 +8,12 @@ const registerDoctor = async (req, res) => {
     const allowedSpecialities = ["Cardiology","Dermatology","Neurology","Pediatrics","Orthopedics"]
 
     try{
+        
+        console.log(req.body); 
+        console.log(req.file);
         const { fullName ,email, phone, password, specialty } = req.body
-        const profilePicture = req.file ? req.file.path : null
+
+        const profilePicture = req.file ? req.file.path : null 
 
         if(!allowedSpecialities.includes(specialty)){
             return res.status(400).json({
@@ -47,7 +51,13 @@ const registerDoctor = async (req, res) => {
 
         const hashedPassword = await generateHashedPassword(password)
 
-        const newDoctor = new Doctor({ fullName, email:normalizedEmail, phone, password:hashedPassword, specialty, profilePicture })
+        const newDoctor = new Doctor({ 
+            fullName, 
+            email:normalizedEmail, 
+            phone, 
+            password:hashedPassword, 
+            specialty, 
+            profilePicture })
 
         await newDoctor.save()
 
@@ -142,7 +152,6 @@ const forgotPasswordDoctor = async(req , res)=>{
         })
     }
 }
-
 
 
 export { registerDoctor, loginDoctor, forgotPasswordDoctor }

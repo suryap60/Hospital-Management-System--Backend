@@ -1,6 +1,6 @@
 import { Appointment, Doctor } from "../models/patientSchema.js"
 
-const getPatientAppointment = async (req,res) => {
+const viewPatientAppointment = async (req,res) => {
     try{
         const doctorId = req.params.id
         
@@ -158,4 +158,4 @@ const deleteAppointment = async (req,res)=>{
     }
 }
 
-export {getPatientAppointment, updateAppointmentStatus, deleteAppointment}
+export {viewPatientAppointment, updateAppointmentStatus, deleteAppointment}

@@ -24,8 +24,8 @@ const patientAppointment = async (req, res) => {
 
     // Check for duplicate booking
     const existingAppointment = await Appointment.findOne({
-      patient: patientId,
-      doctor: doctorId,
+      patientId,
+      doctorId,
       date,
       time,
     });
@@ -37,8 +37,8 @@ const patientAppointment = async (req, res) => {
 
     // Create new appointment
     const newAppointment = new Appointment({
-      patient: patientId,
-      doctor: doctorId,
+      patientId,
+      doctorId,
       date,
       time,
       reason,

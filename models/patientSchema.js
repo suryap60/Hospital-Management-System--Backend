@@ -223,7 +223,8 @@ const doctorSchema = new Schema({
         enum:["Cardiology","Dermatology","Neurology","Pediatrics","Orthopedics"],
     },
     profilePicture:{
-        trype:String
+        trype:String,
+              
     },
     otp :{
       type:String
