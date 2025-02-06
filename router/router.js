@@ -47,8 +47,7 @@ router.delete('/deleteDoctorProfile',checkAuth,deleteDoctorProfile)
 router.post("/patientlogin",login)
 router.post("/patientregister", signUp);
 router.post("/patientforgotPassword",forgotPassword)
-router.post("/patientAppointment/:patientId",patientAppointment)
-
+router.post("/patientAppointment",checkAuth,patientAppointment)
 // router.get("/getAppointment",checkAuth,getAppointment)
 router.post("/nurselogin",nurselogin)
 router.post("/nurseregister",nursesignUp );
