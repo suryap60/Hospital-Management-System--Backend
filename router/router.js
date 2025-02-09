@@ -8,10 +8,11 @@ import { doctorResetPassword } from '../controllers/doctorForgotPasswordControll
 import { forgotPassword, login, signUp } from '../controllers/patientController.js';
 import { nurseforgotPassword, nurselogin, nursesignUp } from '../controllers/nurseController.js';
 import patientAppointment from '../controllers/patientAppointment.js';
-import { viewPatientAppointment, updateAppointmentStatus, deleteAppointment  } from '../controllers/doctorAppointmentController.js';
+import { viewPatientAppointment, updateAppointmentStatus, deleteAppointment, viewPatients  } from '../controllers/doctorAppointmentController.js';
 import checkAuth from '../middleware/checkAuth.js';
 import { deleteDoctorProfile, updateDoctorProfile, viewDoctorProfile } from '../controllers/doctorProfileController.js';
 import { upload } from '../middleware/uploadMiddleware.js';
+import { deleteAdminProfile, updateAdminProfile, viewAdminProfile } from '../controllers/adminProfileController.js';
 
 
 
@@ -26,6 +27,11 @@ router.post('/adminLogin',adminLogin)
 // router.post('/verifyOTP',verifyAndUpdatePassword)
 // router.post('/forgot-password',forgotPassword)
 
+// Admin Profile
+router.get('/viewAdminProfile',checkAuth,viewAdminProfile)
+router.put('/updateAdminProfile',checkAuth,updateAdminProfile)
+router.delete('/deleteAdminProfile',checkAuth,deleteAdminProfile)
+
 //Doctor
 router.post('/registerDoctor',upload,registerDoctor)
 router.post('/loginDoctor',loginDoctor)
@@ -33,9 +39,10 @@ router.post('/forgotPasswordDoctor',doctorForgotPassword)
 router.post('/doctorResetPassword',doctorResetPassword)
 
 //DoctorAppointment
-router.get('/viewPatientAppointment/:id',viewPatientAppointment)
+router.get('/viewPatientAppointment',checkAuth,viewPatientAppointment)
 router.put('/updateAppointment/:id',checkAuth,updateAppointmentStatus)
 router.delete('/deleteAppointment/:id',checkAuth,deleteAppointment)
+router.get('/viewPatients',checkAuth,viewPatients)
 
 // Doctor Profile
 router.get('/viewDoctorProfile',checkAuth,viewDoctorProfile)

@@ -5,17 +5,18 @@ import { validateEmail, validateMobileNumber, validatePassword } from "../valida
 
 const registerDoctor = async (req, res) => {
 
-    const allowedSpecialities = ["Cardiology","Dermatology","Neurology","Pediatrics","Orthopedics"]
-
     try{
         
-        console.log(req.body); 
-        console.log(req.file);
+        console.log(req.body);
+        console.log(req.file); // Debug file
+
+
         const { fullName ,email, phone, password, specialty } = req.body
 
         const profilePicture = req.file ? req.file.path : null 
 
-        if(!allowedSpecialities.includes(specialty)){
+        
+        if(!["Cardiology","Dermatology","Neurology","Pediatrics","Orthopedics"].includes(specialty)){
             return res.status(400).json({
                 message:"Invalid speciality selected"
             })
@@ -62,7 +63,8 @@ const registerDoctor = async (req, res) => {
         await newDoctor.save()
 
         return res.status(201).json({
-            message: "Registration completed successfully!",doctor:newDoctor
+            message: "Registration completed successfully!",
+            doctor:newDoctor
         })
 
     }catch(error){

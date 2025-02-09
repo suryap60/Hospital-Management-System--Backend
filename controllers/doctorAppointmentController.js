@@ -2,7 +2,7 @@ import { Appointment, Doctor } from "../models/patientSchema.js"
 
 const viewPatientAppointment = async (req,res) => {
     try{
-        const doctorId = req.params.id
+        const doctorId = req.user._id
         
         const doctor = await Doctor.findById({_id : doctorId})
         .populate({
@@ -158,4 +158,55 @@ const deleteAppointment = async (req,res)=>{
     }
 }
 
-export {viewPatientAppointment, updateAppointmentStatus, deleteAppointment}
+
+
+const viewPatients = async (req,res) => {
+    try{
+        const doctorId = req.user._id
+        
+        const doctor = await Doctor.findById({_id : doctorId})
+        .populate({
+            path: 'appointments', // This will populate the appointments field
+            populate:{
+                 path: 'patientId',
+            } 
+            }).exec()
+
+        if(!doctor){
+            return res.status(404).json({
+                message: "Doctor Not Found"
+            })
+        }
+
+        
+        // Check if the doctor has any appointments
+        const appointments = doctor.appointments;
+
+        if (appointments.length === 0) {
+            return res.status(404).json({
+                message: "There are no appointments for this doctor"
+            });
+        }
+
+        const patients = appointments.map(appointment => appointment.patientId)
+
+        if(patients.length == 0 ){
+            return res.status(404).json({
+                message:"No Patient found for the doctor"
+            })
+        }
+
+        return res.status(201).json({
+            message: "All Patients",
+            doctor:doctor.fullName,
+            patients: patients
+        });
+    }
+    catch(error){
+        return res.status(500).json({
+            error: error.message
+        })
+    }
+}
+
+export {viewPatientAppointment, updateAppointmentStatus, deleteAppointment, viewPatients }

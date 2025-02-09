@@ -62,7 +62,8 @@ const adminLogin = async(req, res) => {
             })
         }
 
-        const admin = await Admin.findOne({email})
+        const normalizedEmail = email.toLowerCase()
+        const admin = await Admin.findOne({email:normalizedEmail})
 
         if(email !== "admin@gmail.com"){
             return res.status(404).json({
@@ -100,7 +101,9 @@ const forgotPassword = async(req , res)=>{
 
         const { email , newPassword } = req.body
 
-        const admin = await Admin.findOne({email})
+        const normalizedEmail = email.toLowerCase()
+
+        const admin = await Admin.findOne({email:normalizedEmail})
 
         if(!admin){
             return res.status(404).json({
