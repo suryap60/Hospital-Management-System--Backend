@@ -7,6 +7,10 @@ const viewPatientAppointment = async (req,res) => {
         const doctor = await Doctor.findById({_id : doctorId})
         .populate({
             path: 'appointments', // This will populate the appointments field
+            populate:{
+                path:'patientId',
+                select:'name'
+            }
             }).exec()
 
         if(!doctor){
@@ -20,7 +24,7 @@ const viewPatientAppointment = async (req,res) => {
         const appointments = doctor.appointments;
         
         // const appoinment  = await Doctor.findOne({patient})
-        console.log("Appointments found:", appointments.length);  // Debugging log to check how many appointments were found
+        // console.log("Appointments found:", appointments.length);  // Debugging log to check how many appointments were found
 
 
         if(appointments.length === 0){
@@ -78,19 +82,11 @@ const updateAppointmentStatus = async (req,res)=>{
             })
         }
 
-        const updatedAppointment = await Appointment.findById({
-            _id:appointmentId},
-            // {status},
-            // {new:true}  // Ensure the updated document is returned
-
-        )
-        if (!updatedAppointment) {
-            return res.status(404).json({
-                message: "Appointment Not Found"
-            })
-        }
-
-        updatedAppointment.status = status;
+        const updatedAppointment = await Appointment.findByIdAndUpdate(
+            appointmentId,  // Find the appointment by ID
+            { status },     // Update status
+            { new: true }   // Return the updated document
+        );
         await updatedAppointment.save();
 
 
