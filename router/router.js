@@ -4,11 +4,12 @@ import { adminLogin, adminSignUp } from '../controllers/adminController.js'
 import { loginDoctor, registerDoctor } from '../controllers/doctorController.js'
 import { doctorForgotPassword } from '../controllers/doctorForgotPasswordController.js';
 import { doctorResetPassword } from '../controllers/doctorForgotPasswordController.js';
+import { viewPatients } from '../controllers/doctorViewPatients.js';
 
 import { forgotPassword, login, signUp } from '../controllers/patientController.js';
 import { nurseforgotPassword, nurselogin, nursesignUp } from '../controllers/nurseController.js';
 import patientAppointment from '../controllers/patientAppointment.js';
-import { viewPatientAppointment, updateAppointmentStatus, deleteAppointment, viewPatients  } from '../controllers/doctorAppointmentController.js';
+import { viewPatientAppointment, updateAppointmentStatus, deleteAppointment } from '../controllers/doctorAppointmentController.js';
 import checkAuth from '../middleware/checkAuth.js';
 import { deleteDoctorProfile, updateDoctorProfile, viewDoctorProfile } from '../controllers/doctorProfileController.js';
 import { upload } from '../middleware/uploadMiddleware.js';
