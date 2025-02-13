@@ -1,4 +1,3 @@
-// import { populate } from "dotenv"
 import { Appointment, Doctor } from "../models/patientSchema.js"
 
 const viewPatientAppointment = async (req,res) => {
@@ -23,23 +22,23 @@ const viewPatientAppointment = async (req,res) => {
         
         // Check if the doctor has any appointments
         const appointments = doctor.appointments;
-        
-        // const appoinment  = await Doctor.findOne({patient})
-        // console.log("Appointments found:", appointments.length);  // Debugging log to check how many appointments were found
 
 
         if(appointments.length === 0){
             return res.status(404).json({
                 message: "There is No Appointment"
             })
-        
-
         }
+
+        const formatedAppointment = appointments.map((appointment) => ({
+            ...appointment._doc,
+            date: new Date(appointment.date).toISOString().split("T")[0], // Converts to YYYY-MM-DD
+        }));
 
         return res.status(201).json({
             message: "All appointments",
             doctor:doctor.fullName,
-            appointment: appointments
+            appointment: formatedAppointment
         });
     }
     catch(error){

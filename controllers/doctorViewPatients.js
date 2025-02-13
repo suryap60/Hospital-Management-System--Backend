@@ -18,11 +18,6 @@ const viewPatients = async (req,res) => {
                         select:'medicalConditions medications surgeries emergencyContact'
                     },
                     { 
-                        path:'appointment', 
-                        select:'date time status',
-                        match:{doctor:doctorId}
-                    },
-                    { 
                         path:'feedbackreview' ,
                         select:'rating comment feedbackDate' , 
                         match: {doctor:doctorId}
@@ -48,19 +43,31 @@ const viewPatients = async (req,res) => {
             })
         }
 
-        const patients = doctor.appointments.map(app => ({
-            name: app.patientId.name,
-            age:app.patientId.age,
-            gender:app.patientId.gender,
-            phone: app.patientId.phone,
-            appointment: app.status || "No Available Appointment",
-            medicalHistory: app.patientId.medicalHistory || "No history available",
-            feedbackreview: app.patientId.feedbackreview || "No feedback",
-            payment: app.patientId.payment ?.[0]?.amount || "Not paid",
-            chat: app.patientId.chat || "No messages",
-        }))
+         // Create a Map to remove duplicate patients
+         const uniquePatientsMap = new Map();
 
-        if(patients.length == 0 ){
+        doctor.appointments.map(app => {
+            const patient = app.patientId;
+            if(!uniquePatientsMap.has(patient._id.toString())){
+                uniquePatientsMap.set(patient._id.toString(),{
+                    _id: app.patientId._id,
+                    name: app.patientId.name,
+                    email:app.patientId.email,
+                    age:app.patientId.age,
+                    gender:app.patientId.gender,
+                    phone: app.patientId.phone,
+                    // appointment: app.status || "No Available Appointment",
+                    medicalHistory: app.patientId.medicalHistory || "No history available",
+                    feedbackreview: app.patientId.feedbackreview || "No feedback",
+                    payment: app.patientId.payment ?.[0]?.amount || "Not paid",
+                    chat: app.patientId.chat || "No messages",
+                })
+            }
+        })
+     
+        const uniquePatients = Array.from(uniquePatientsMap.values());
+
+        if(uniquePatients.length == 0 ){
             return res.status(404).json({
                 message:"No Patient found for the doctor"
             })
@@ -69,7 +76,7 @@ const viewPatients = async (req,res) => {
         return res.status(201).json({
             message: "All Patients",
             doctor:doctor.fullName,
-            patients:patients
+            patients:uniquePatients
         });
     }
     catch(error){
