@@ -222,6 +222,10 @@ const doctorSchema = new Schema({
         required:true,
         enum:["Cardiology","Dermatology","Neurology","Pediatrics","Orthopedics"],
     },
+    experiance:{
+      type:Number,
+      required:true
+    },
     profilePicture:{
         type:String,
               

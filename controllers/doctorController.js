@@ -11,7 +11,7 @@ const registerDoctor = async (req, res) => {
         console.log(req.file); // Debug file
 
 
-        const { fullName ,email, phone, password, specialty } = req.body
+        const { fullName ,email, phone, password, specialty, experiance } = req.body
 
         const profilePicture = req.file ? req.file.path : null 
 
@@ -58,6 +58,7 @@ const registerDoctor = async (req, res) => {
             phone, 
             password:hashedPassword, 
             specialty, 
+            experiance,
             profilePicture })
 
         await newDoctor.save()
