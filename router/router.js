@@ -14,6 +14,7 @@ import checkAuth from '../middleware/checkAuth.js';
 import { deleteDoctorProfile, updateDoctorProfile, viewDoctorProfile } from '../controllers/doctorProfileController.js';
 import { upload } from '../middleware/uploadMiddleware.js';
 import { deleteAdminProfile, updateAdminProfile, viewAdminProfile } from '../controllers/adminProfileController.js';
+import { adminViewAllAppointments, adminViewAllDoctors, adminViewAllPatients } from '../controllers/adminView.js';
 
 
 
@@ -32,6 +33,10 @@ router.post('/adminLogin',adminLogin)
 router.get('/viewAdminProfile',checkAuth,viewAdminProfile)
 router.put('/updateAdminProfile',checkAuth,updateAdminProfile)
 router.delete('/deleteAdminProfile',checkAuth,deleteAdminProfile)
+//admin featues
+router.get('/adminViewAllDoctors',checkAuth,adminViewAllDoctors)
+router.get('/adminViewAllPateints',checkAuth,adminViewAllPatients)
+router.get('/adminViewAllAppointments',checkAuth,adminViewAllAppointments)
 
 //Doctor
 router.post('/registerDoctor',upload,registerDoctor)

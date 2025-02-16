@@ -44,7 +44,7 @@ const viewPatients = async (req,res) => {
         }
 
          // Create a Map to remove duplicate patients
-         const uniquePatientsMap = new Map();
+        const uniquePatientsMap = new Map();
 
         doctor.appointments.map(app => {
             const patient = app.patientId;
