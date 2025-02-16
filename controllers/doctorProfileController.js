@@ -1,4 +1,5 @@
 import { Doctor } from "../models/patientSchema.js"
+// import { generateHashedPassword } from "../utils/bcrypt.js"
 
 const viewDoctorProfile = async (req, res) => {
     try{
@@ -30,6 +31,15 @@ const updateDoctorProfile = async (req, res) => {
         const doctorId = req.user._id
 
         const updatedData = req.body
+
+        //  // If a new password is provided, hash it
+        // if(updatedData.password){
+        //     const hashedPassword = await generateHashedPassword(updatedData.password);
+        //     updatedData.password = hashedPassword
+        // }else {
+        //     // If no new password is provided, remove it from the update data to prevent overwriting
+        //     delete updatedData.password;
+        // }
 
         const doctor = await Doctor.findByIdAndUpdate({_id:doctorId},updatedData,{new:true})
         
