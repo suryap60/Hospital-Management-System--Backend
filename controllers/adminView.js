@@ -1,4 +1,5 @@
 import { Admin } from "../models/adminSchema.js";
+import { Nurse } from "../models/nurseSchema.js";
 import { Appointment, Doctor, Patient } from "../models/patientSchema.js";
 
 const adminViewAllDoctors = async(req, res)=>{
@@ -92,4 +93,29 @@ const adminViewAllAppointments = async(req, res)=>{
 
 }
 
-export { adminViewAllDoctors, adminViewAllPatients, adminViewAllAppointments }
+const adminViewAllNurses = async(req, res)=>{
+
+    try{
+        const adminId  = req.user._id;
+        const admin = await Admin.findById(adminId)
+        if(!admin){
+            return res.status(404).json({
+                message:"Admin Not Found"
+            })
+        }
+
+        const nurses = await Nurse.find()
+        return res.status(201).json({
+            message:"View All Doctors",nurses
+        })
+    }catch(error){
+        return res.status(500).json({
+            error:error.message
+        })
+    }
+
+}
+
+
+
+export { adminViewAllDoctors, adminViewAllPatients,adminViewAllAppointments, adminViewAllNurses }
